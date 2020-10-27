@@ -1,5 +1,6 @@
 from django.db import models
 from django_countries.fields import CountryField
+from pkg_resources import NullProvider
 from core import models as core_models
 
 
@@ -31,6 +32,13 @@ class Amenity(AbstractItem):
 
     class Meta:
         verbose_name_plural = "Amenities"
+
+
+class Facilities(AbstractItem):
+    """Amenity Type Model Definition"""
+
+    class Meta:
+        verbose_name = "Facilities"
 
 
 class HouseRule(AbstractItem):
@@ -73,6 +81,7 @@ class Room(core_models.TimeStampedModel):
     roomType = models.ForeignKey(
         "RoomType", related_name="rooms", on_delete=models.SET_NULL, null=True
     )
+    facilities = models.ManyToManyField("Facilities", related_name="rooms", blank=True)
     amenities = models.ManyToManyField("Amenity", related_name="rooms", blank=True)
     house_rules = models.ManyToManyField("HouseRule", related_name="rooms", blank=True)
 
@@ -86,7 +95,13 @@ class Room(core_models.TimeStampedModel):
         except ZeroDivisionError:
             return 0
         else:
+            if not len(all_reviews):
+                return "No reviews"
             return all_ratings / len(all_reviews)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.city = str.capitalize(self.city)
+        super().save(*args, **kwargs)
