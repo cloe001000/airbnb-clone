@@ -61,7 +61,7 @@ class RoomAdmin(admin.ModelAdmin):
         ),
         (
             "More About the Spaces",
-            {"fields": ("amenities", "house_rules")},
+            {"fields": ("amenities", "facilities", "house_rules")},
         ),
         ("Last Detail", {"fields": ("host",)}),
     )
@@ -100,6 +100,7 @@ class RoomAdmin(admin.ModelAdmin):
     filter_horizontal = (
         "amenities",
         "house_rules",
+        "facilities",
     )
 
     def count_amenities(self, obj):
@@ -107,6 +108,8 @@ class RoomAdmin(admin.ModelAdmin):
 
     def count_photos(self, obj):
         return obj.photos.count()
+
+    count_photos.short_description = "Photo count"
 
 
 @admin.register(models.Photo)
