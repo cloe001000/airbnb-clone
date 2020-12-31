@@ -132,6 +132,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+# 위 URL로 이동하면 아레의 폴더내용을 볼수 있다 장고에서 static 파일을 사용가능하게 하는 방법
+# 아레 폴더안에 들어있는 CSS를 위의 URL로 접근하는것을 html link로 넣어서 tailwind css를 적용시켜준다
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 AUTH_USER_MODEL = "users.User"
 
